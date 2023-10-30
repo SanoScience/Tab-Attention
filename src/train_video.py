@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import SubsetRandomSampler
 from sklearn.model_selection import StratifiedGroupKFold
 from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
-from models.tabattention import TabAttention
+from models.resnet_tabattention import ResNetTabAttention
 import time
 
 from models.resnet import r3d_18
@@ -280,11 +280,11 @@ for fold, (train_ids, valid_ids) in enumerate(
     elif args.model_type == "INTERACTIVE":
         model = InteractiveHNN(in_channels=1, n_outputs=1, ndim_non_img=6)
     elif args.model_type == "TabAttention":
-        model = TabAttention(cbam=True, tabattention=args.tab_attention,
-                             input_size=(args.y_img_size - args.pixels_crop, args.x_img_size - args.pixels_crop),
-                             n_frames=args.frames_num, temporal_mhsa=args.temporal_mhsa,
-                             temporal_attention=args.temporal_attention, tabular_branch=args.tabular_branch,
-                             cam_sam=args.cam_sam)
+        model = ResNetTabAttention(cbam=True, tabattention=args.tab_attention,
+                                   input_size=(args.y_img_size - args.pixels_crop, args.x_img_size - args.pixels_crop),
+                                   n_frames=args.frames_num, temporal_mhsa=args.temporal_mhsa,
+                                   temporal_attention=args.temporal_attention, tabular_branch=args.tabular_branch,
+                                   cam_sam=args.cam_sam)
     else:
         raise NotImplementedError(f"No model for model type: {args.model_type}")
 
